@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import objects.Baba;
-import objects.Dirt;
-import objects.Grass;
-import objects.Wall;
+import objects.*;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
@@ -83,12 +80,12 @@ public class Room {
         while(sc.hasNextLine()) {
             String[] line = sc.nextLine().split(",");
             if(line[0].equals("baba")) {
-                ImageTile baba = new Baba(new Point2D(Integer.parseInt(line[1]), Integer.parseInt(line[2])), line[3]);
+                Baba baba = new Baba(new Point2D(Integer.parseInt(line[1]), Integer.parseInt(line[2])), line[3]);
+                r.player = baba;
             }
-
         }
 
-        r.player = baba;
+        //r.player = baba;
         return r;
     }
 

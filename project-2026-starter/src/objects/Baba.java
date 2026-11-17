@@ -13,7 +13,7 @@ public class Baba implements ImageTile {
 
     public Baba(Point2D position, String direction) {
         this.position = position;
-        direction = direction;
+        this.direction = direction;
     }
 
     @Override

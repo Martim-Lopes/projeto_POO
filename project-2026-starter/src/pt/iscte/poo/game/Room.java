@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import objects.Baba;
 import objects.Dirt;
+import objects.Grass;
+import objects.Wall;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
@@ -61,22 +63,30 @@ public class Room {
                 char c = line.charAt(i);
                 if (c == 'X') {
                     ImageTile wall = new Wall(new Point2D(i, j));
+                    r.addObject(wall);
+                }
+                if (c == 'x') {
+                    ImageTile crackedWall =  new CrackedWall(new Point2D(i,j));
+                    r.addObject(crackedWall);
+                }
+                if (c == 'H') {
+                    ImageTile hole = new Hole(new Point2D(i,j));
+                    r.addObject(hole);
+                }
+                if(c == 'g') {
+                    ImageTile grass = new Grass(new Point2D(i, j));
+                    r.addObject(grass);
                 }
             }
             j++;
         }
+        while(sc.hasNextLine()) {
+            String[] line = sc.nextLine().split(",");
+            if(line[0].equals("baba")) {
+                ImageTile baba = new Baba(new Point2D(Integer.parseInt(line[1]), Integer.parseInt(line[2])), line[3]);
+            }
 
-
-        for (int i = 0; i <= 10; i++) {
-            ImageTile dirt = new Dirt(new Point2D(i, i));
-            r.addObject(dirt);
-            ImageTile dirt2 = new Dirt(new Point2D(10 - i, i));
-            r.addObject(dirt2);
         }
-
-
-        Baba baba = new Baba(new Point2D(5, 5));
-        r.addObject(baba);
 
         r.player = baba;
         return r;

@@ -2,6 +2,7 @@ package pt.iscte.poo.game;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import objects.Baba;
 import pt.iscte.poo.gui.ImageGUI;
@@ -17,8 +18,12 @@ public class GameEngine implements Observer {
     private Room currentRoom;
     private int lastTickProcessed = 0;
 
-    private GameEngine() {
-        currentRoom = Room.readRoom(new File(ROOMS_DIRECTORY + "/room0.txt"));
+    private GameEngine(){
+        try {
+            currentRoom = Room.readRoom(new File(ROOMS_DIRECTORY + "/room0.txt"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         updateGUI();
     }
 

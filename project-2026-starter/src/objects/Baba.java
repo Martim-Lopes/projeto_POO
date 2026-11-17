@@ -9,10 +9,11 @@ import java.util.Random;
 public class Baba implements ImageTile {
 
     private Point2D position;
-    private String direction = "r";
+    private String direction;
 
-    public Baba(Point2D position) {
+    public Baba(Point2D position, String direction) {
         this.position = position;
+        direction = direction;
     }
 
     @Override

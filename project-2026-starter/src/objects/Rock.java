@@ -6,7 +6,6 @@ import pt.iscte.poo.utils.Point2D;
 public class Rock implements ImageTile {
 
     private Point2D position;
-    private String direction = "r";
 
 
     public Rock(Point2D position) {
@@ -16,7 +15,7 @@ public class Rock implements ImageTile {
 
     @Override
     public String getName() {
-        return "rock-" + direction;
+        return "rock";
     }
 
     @Override

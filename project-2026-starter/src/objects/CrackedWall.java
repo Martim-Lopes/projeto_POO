@@ -14,7 +14,7 @@ public class CrackedWall implements ImageTile {
 
     @Override
     public String getName() {
-        return "cracked wall";
+        return "cracked-wall";
     }
 
     @Override

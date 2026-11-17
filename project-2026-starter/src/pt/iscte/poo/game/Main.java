@@ -10,5 +10,7 @@ public class Main {
 		gui.registerObserver(GameEngine.getInstance());
 		gui.go();
 	}
+
+
 	
 }

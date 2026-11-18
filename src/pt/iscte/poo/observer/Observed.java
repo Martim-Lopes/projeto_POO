@@ -19,6 +19,4 @@ public class Observed {
 			o.update(this);
 		}
 	}
-
-	
 }

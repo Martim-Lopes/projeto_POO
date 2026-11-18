@@ -1,5 +1,6 @@
 package objects;
 
+import pt.iscte.poo.game.Room;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
@@ -31,9 +32,18 @@ public class Baba implements ImageTile {
         return 25;
     }
 
-    public void move(Direction d) {
-        Random rand = new Random();
-        position = new Point2D(rand.nextInt(10), rand.nextInt(10));
+    public void move(Direction d, Room room) {
+        direction = letterFor(d);
+        Point2D next = position.plus(d.asVector());
+        position = next;
+    }
 
+    private static String letterFor(Direction d) {
+        switch (d) {
+            case UP: return "u";
+            case DOWN: return "d";
+            case LEFT: return "l";
+            default: return "r";
+        }
     }
 }

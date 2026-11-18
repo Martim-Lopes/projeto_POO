@@ -41,8 +41,9 @@ public class Room {
         r.setName(f.getName());
         Scanner sc = new Scanner(f);
 
-        int cols = Integer.parseInt(sc.next(","));
-        int rows =  Integer.parseInt(sc.next(" "));
+        String[] s = sc.nextLine().split(",");
+        int cols = Integer.parseInt(s[0]);
+        int rows = Integer.parseInt(s[1]);
 
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
@@ -81,11 +82,10 @@ public class Room {
             String[] line = sc.nextLine().split(",");
             if(line[0].equals("baba")) {
                 Baba baba = new Baba(new Point2D(Integer.parseInt(line[1]), Integer.parseInt(line[2])), line[3]);
+                r.addObject(baba);
                 r.player = baba;
             }
         }
-
-        //r.player = baba;
         return r;
     }
 

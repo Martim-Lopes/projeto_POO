@@ -17,19 +17,31 @@ public class GameEngine implements Observer {
 
     private Room currentRoom;
     private int lastTickProcessed = 0;
+    private int level = 0;
 
     private GameEngine(){
         try {
-            currentRoom = Room.readRoom(new File(ROOMS_DIRECTORY + "/room0.txt"));
+            loadLevel(this.level);
+            updateGUI();
+
+
+
+
+
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        updateGUI();
     }
 
 	public static GameEngine getInstance() {
 		return INSTANCE;
 	}
+
+    public void loadLevel(int level) throws FileNotFoundException {
+        String directory = ROOMS_DIRECTORY + "/room"+level+".txt";
+        currentRoom = Room.readRoom(new File(directory));
+    }
 
     @Override
     public void update(Observed source) {
@@ -39,7 +51,7 @@ public class GameEngine implements Observer {
 
             if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN) {
                 Direction d = Direction.directionFor(k);
-                getPlayer().move(d);
+                getPlayer().move(d,currentRoom);
                 updateGUI();
             }
         }

@@ -24,6 +24,7 @@ public class Bomb extends GameObject {
         return 0;
     }
 
+    //rastilho aceso ou nao
     public boolean isLit() {
         return true;
     }

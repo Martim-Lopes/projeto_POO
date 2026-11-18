@@ -3,28 +3,12 @@ package objects;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Hole implements ImageTile {
+public class Hole extends  GameObject {
 
-    private Point2D position;
     private boolean withBox = false;
 
     public Hole(Point2D position) {
-        this.position = position;
-    }
-
-    @Override
-    public String getName() {
-        return "hole";
-    }
-
-    @Override
-    public Point2D getPosition() {
-        return position;
-    }
-
-    @Override
-    public int getLayer() {
-        return 10;
+        super(position, "hole", 10);
     }
 
     public void putBox() {
@@ -33,6 +17,11 @@ public class Hole implements ImageTile {
 
     public boolean hasBox(){
         return withBox;
+    }
+
+    @Override
+    public boolean isPassable() {
+        return false;
     }
 
 

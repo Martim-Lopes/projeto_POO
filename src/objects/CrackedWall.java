@@ -3,27 +3,9 @@ package objects;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class CrackedWall implements ImageTile {
-
-    private Point2D position;
+public class CrackedWall extends GameObject {
 
     public CrackedWall(Point2D position) {
-        this.position = position;
-    }
-
-
-    @Override
-    public String getName() {
-        return "cracked-wall";
-    }
-
-    @Override
-    public Point2D getPosition() {
-        return position;
-    }
-
-    @Override
-    public int getLayer() {
-        return 10;
+        super(position, "cracked-wall", 10);
     }
 }

@@ -3,28 +3,15 @@ package objects;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Rock implements ImageTile {
-
-    private Point2D position;
+public class Rock extends GameObject {
 
 
     public Rock(Point2D position) {
-        this.position = position;
-    }
-
-
-    @Override
-    public String getName() {
-        return "rock";
+        super(position, "rock", 10);
     }
 
     @Override
-    public Point2D getPosition() {
-        return position;
-    }
-
-    @Override
-    public int getLayer() {
-        return 10;
+    public boolean isPassable() {
+        return false;
     }
 }

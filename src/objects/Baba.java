@@ -1,20 +1,18 @@
 package objects;
 
+import pt.iscte.poo.game.GameEngine;
 import pt.iscte.poo.game.Room;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
-import java.util.Random;
+public class Baba extends GameObject {
 
-public class Baba implements ImageTile {
-
-    private Point2D position;
     private String direction;
 
     public Baba(Point2D position, String direction) {
-        this.position = position;
         this.direction = direction;
+        super(position, "baba-" + direction, 25);
     }
 
     @Override
@@ -22,20 +20,14 @@ public class Baba implements ImageTile {
         return "baba-" + direction;
     }
 
-    @Override
-    public Point2D getPosition() {
-        return position;
-    }
-
-    @Override
-    public int getLayer() {
-        return 25;
-    }
-
-    public void move(Direction d, Room room) {
+    public boolean move(Direction d, Room room) {
         direction = letterFor(d);
-        Point2D next = position.plus(d.asVector());
-        position = next;
+        Point2D next = getPosition().plus(d.asVector());
+        if(room.canMove(next)){
+            setPosition(next);
+            return true;
+        }
+        return false;
     }
 
     private static String letterFor(Direction d) {

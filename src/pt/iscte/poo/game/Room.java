@@ -12,9 +12,11 @@ import pt.iscte.poo.utils.Point2D;
 
 public class Room {
 
-    private List<ImageTile> objects;
+    private List<GameObject> objects;
     private String roomName;
     private Baba player;
+    private static int cols;
+    private static int rows;
 
     public Room() {
         objects = new ArrayList<>();
@@ -28,11 +30,11 @@ public class Room {
         return roomName;
     }
 
-    public void addObject(ImageTile obj) {
+    public void addObject(GameObject obj) {
         objects.add(obj);
     }
 
-    public List<ImageTile> getObjects() {
+    public List<GameObject> getObjects() {
         return objects;
     }
 
@@ -42,12 +44,12 @@ public class Room {
         Scanner sc = new Scanner(f);
 
         String[] s = sc.nextLine().split(",");
-        int cols = Integer.parseInt(s[0]);
-        int rows = Integer.parseInt(s[1]);
+        cols = Integer.parseInt(s[0]);
+        rows = Integer.parseInt(s[1]);
 
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
-                ImageTile dirt = new Dirt(new Point2D(i, j));
+                GameObject dirt = new Dirt(new Point2D(i, j));
                 r.addObject(dirt);
             }
         }
@@ -59,21 +61,9 @@ public class Room {
             }
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);
-                if (c == 'X') {
-                    ImageTile wall = new Wall(new Point2D(i, j));
-                    r.addObject(wall);
-                }
-                if (c == 'x') {
-                    ImageTile crackedWall =  new CrackedWall(new Point2D(i,j));
-                    r.addObject(crackedWall);
-                }
-                if (c == 'H') {
-                    ImageTile hole = new Hole(new Point2D(i,j));
-                    r.addObject(hole);
-                }
-                if(c == 'g') {
-                    ImageTile grass = new Grass(new Point2D(i, j));
-                    r.addObject(grass);
+                MapElements elements = MapElements.fromChar(c);
+                if (elements != null) {
+                    r.addObject(elements.create(new Point2D(i, j)));
                 }
             }
             j++;
@@ -91,5 +81,13 @@ public class Room {
 
     public Baba getPlayer() {
         return player;
+    }
+
+    public boolean canMove(Point2D position) {
+        if(position.getX() < 0 || position.getX() >= cols || position.getY() >= rows || position.getY() < 0) {return false;}
+        for(GameObject obj : objects) {
+            if(obj.getPosition().equals(position) && !obj.isPassable()) {return false;}
+        }
+        return true;
     }
 }

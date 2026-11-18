@@ -23,12 +23,6 @@ public class GameEngine implements Observer {
         try {
             loadLevel(this.level);
             updateGUI();
-
-
-
-
-
-
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -73,8 +67,11 @@ public class GameEngine implements Observer {
         }
     }
 
-
     public Baba getPlayer() {
         return currentRoom.getPlayer();
+    }
+
+    public Room getCurrentRoom(){
+        return currentRoom;
     }
 }

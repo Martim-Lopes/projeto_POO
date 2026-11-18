@@ -3,27 +3,9 @@ package objects;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Grass implements ImageTile {
-
-    private Point2D position;
-
+public class Grass extends GameObject {
 
     public Grass(Point2D position) {
-        this.position = position;
-    }
-
-    @Override
-    public String getName() {
-        return "grass";
-    }
-
-    @Override
-    public Point2D getPosition() {
-        return position;
-    }
-
-    @Override
-    public int getLayer() {
-        return 10;
+        super(position, "grass", 10);
     }
 }

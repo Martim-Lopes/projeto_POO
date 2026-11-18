@@ -18,11 +18,12 @@ public class GameEngine implements Observer {
     private Room currentRoom;
     private int lastTickProcessed = 0;
     private int level = 0;
+    private int totalMoves = 0;
 
     private GameEngine(){
         try {
             loadLevel(this.level);
-            updateGUI();
+
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -36,12 +37,11 @@ public class GameEngine implements Observer {
     public void loadLevel(int level) throws FileNotFoundException {
         String directory = ROOMS_DIRECTORY + "/room"+level+".txt";
         currentRoom = Room.readRoom(new File(directory));
+        updateGUI();
     }
 
     @Override
     public void update(Observed source) {
-
-        int c = 0;
 
         if (ImageGUI.getInstance().wasKeyPressed()) {
             int k = ImageGUI.getInstance().keyPressed();
@@ -57,7 +57,11 @@ public class GameEngine implements Observer {
 
             if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN) {
                 Direction d = Direction.directionFor(k);
-                getPlayer().move(d,currentRoom);
+                if(getPlayer().move(d,currentRoom)){
+                    totalMoves++;
+
+                }
+                updateStatusMessage();
                 updateGUI();
             }
         }
@@ -77,6 +81,11 @@ public class GameEngine implements Observer {
             ImageGUI.getInstance().clearImages();
             ImageGUI.getInstance().addImages(currentRoom.getObjects());
         }
+    }
+
+    private void updateStatusMessage() {
+        ImageGUI.getInstance().setStatusMessage(
+                "Level " + level + " | Total moves: " + totalMoves + " | R: reiniciar");
     }
 
     public Baba getPlayer() {

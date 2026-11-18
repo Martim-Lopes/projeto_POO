@@ -15,8 +15,8 @@ public class Room {
     private List<GameObject> objects;
     private String roomName;
     private Baba player;
-    private static int cols;
-    private static int rows;
+    private int cols;
+    private int rows;
 
     public Room() {
         objects = new ArrayList<>();
@@ -44,11 +44,11 @@ public class Room {
         Scanner sc = new Scanner(f);
 
         String[] s = sc.nextLine().split(",");
-        cols = Integer.parseInt(s[0]);
-        rows = Integer.parseInt(s[1]);
+        r.cols = Integer.parseInt(s[0]);
+        r.rows = Integer.parseInt(s[1]);
 
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
+        for (int i = 0; i < r.cols; i++) {
+            for (int j = 0; j < r.rows; j++) {
                 GameObject dirt = new Dirt(new Point2D(i, j));
                 r.addObject(dirt);
             }
@@ -70,10 +70,18 @@ public class Room {
         }
         while(sc.hasNextLine()) {
             String[] line = sc.nextLine().split(",");
-            if(line[0].equals("baba")) {
-                Baba baba = new Baba(new Point2D(Integer.parseInt(line[1]), Integer.parseInt(line[2])), line[3]);
-                r.addObject(baba);
+            String type = line[0].trim();
+            Point2D pos = new Point2D(Integer.parseInt(line[1].trim()), Integer.parseInt(line[2].trim()));
+            // Caso à parte para o baba. Existe a opção de usarmos o instanceof, mas acho que é demasiado avançado
+            if (type.equals("baba")) {
+                Baba baba = new Baba(pos, line[3].trim());
                 r.player = baba;
+                r.addObject(baba);
+            } else {
+                RoomObjects objs = RoomObjects.fromString(type);
+                if (objs != null) {
+                    r.addObject(objs.create(pos));
+                }
             }
         }
         return r;

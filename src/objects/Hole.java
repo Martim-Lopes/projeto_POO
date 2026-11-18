@@ -19,10 +19,6 @@ public class Hole extends  GameObject {
         return withBox;
     }
 
-    @Override
-    public boolean isPassable() {
-        return false;
-    }
 
 
 }

@@ -1,8 +1,6 @@
 package pt.iscte.poo.game;
 
-import objects.Baba;
-import objects.GameObject;
-import objects.Rock;
+import objects.*;
 import pt.iscte.poo.utils.Point2D;
 
 public enum RoomObjects {
@@ -39,7 +37,7 @@ public enum RoomObjects {
     WORDIS("wordIs"){
         @Override
         public GameObject create(Point2D position) {
-            return new WorIs(position);
+            return new WordIs(position);
         }
     },
     WORDWIN("wordWin"){

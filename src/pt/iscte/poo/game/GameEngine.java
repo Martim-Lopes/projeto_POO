@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import objects.Baba;
+import objects.GameObject;
 import pt.iscte.poo.gui.ImageGUI;
 import pt.iscte.poo.observer.Observed;
 import pt.iscte.poo.observer.Observer;
@@ -37,6 +38,8 @@ public class GameEngine implements Observer {
     public void loadLevel(int level) throws FileNotFoundException {
         String directory = ROOMS_DIRECTORY + "/room"+level+".txt";
         currentRoom = Room.readRoom(new File(directory));
+        totalMoves = 0;
+        updateStatusMessage();
         updateGUI();
     }
 
@@ -60,6 +63,14 @@ public class GameEngine implements Observer {
                 if(getPlayer().move(d,currentRoom)){
                     totalMoves++;
                     updateStatusMessage();
+                    if(currentRoom.isWin()){
+                        level++;
+                        try{
+                            loadLevel(level);
+                        }catch (FileNotFoundException e){
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
             }
         }

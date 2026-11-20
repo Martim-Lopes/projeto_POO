@@ -83,6 +83,7 @@ public class Room {
                 }
             }
         }
+        sc.close();
         return r;
     }
 
@@ -110,5 +111,14 @@ public class Room {
             if(obj.getPosition().equals(position) && obj.isPushable()) {return obj;}
         }
         return null;
+    }
+
+
+    public boolean isWin() {
+        Point2D playerPos = player.getPosition();
+        for(GameObject obj : objects) {
+            if(obj.getPosition().equals(playerPos) && obj.isWin()) {return true;}
+        }
+        return false;
     }
 }

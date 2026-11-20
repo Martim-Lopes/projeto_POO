@@ -8,6 +8,7 @@ public abstract class GameObject implements ImageTile {
     private Point2D position;
     private final String imageName;
     private final int layer;
+    private boolean isWin = false;
 
     public GameObject(Point2D position, String imageName, int layer) {
         this.position = position;
@@ -42,6 +43,11 @@ public abstract class GameObject implements ImageTile {
         return false;
     }
 
+    public boolean isWin(){
+        return isWin;
+    }
 
-
+    public void setWin(boolean isWin){
+        this.isWin = isWin;
+    }
 }

@@ -14,4 +14,9 @@ public class Rock extends GameObject {
     public boolean isPassable() {
         return false;
     }
+
+    @Override
+    public boolean isPushable() {
+        return true;
+    }
 }

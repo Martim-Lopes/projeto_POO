@@ -50,4 +50,8 @@ public abstract class GameObject implements ImageTile {
     public void setWin(boolean isWin){
         this.isWin = isWin;
     }
+
+    public boolean isLethal() {
+        return false;
+    }
 }

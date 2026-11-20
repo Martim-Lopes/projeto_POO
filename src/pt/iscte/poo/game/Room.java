@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import objects.*;
-import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
 public class Room {
@@ -37,6 +36,7 @@ public class Room {
     public List<GameObject> getObjects() {
         return objects;
     }
+
     public static Room readRoom(File f) throws FileNotFoundException {
         Room r = new Room();
         r.setName(f.getName());
@@ -67,7 +67,7 @@ public class Room {
             }
             j++;
         }
-        while(sc.hasNextLine()) {
+        while (sc.hasNextLine()) {
             String[] line = sc.nextLine().split(",");
             String type = line[0].trim();
             Point2D pos = new Point2D(Integer.parseInt(line[1].trim()), Integer.parseInt(line[2].trim()));
@@ -92,32 +92,60 @@ public class Room {
     }
 
     public boolean canMove(Point2D position) {
-        if(position.getX() < 0 || position.getX() >= cols || position.getY() >= rows || position.getY() < 0) {return false;}
-        for(GameObject obj : objects) {
-            if(obj.getPosition().equals(position) && !obj.isPassable()) {return false;}
+        if (position.getX() < 0 || position.getX() >= cols || position.getY() >= rows || position.getY() < 0) {
+            return false;
+        }
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position) && !obj.isPassable()) {
+                return false;
+            }
         }
         return true;
     }
 
     public boolean canPush(Point2D position) {
-        for(GameObject obj : objects) {
-            if(obj.getPosition().equals(position) && obj.isPushable()) {return true;}
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position) && obj.isPushable()) {
+                return true;
+            }
         }
         return false;
     }
 
-    public GameObject getObject(Point2D position) {
-        for(GameObject obj : objects) {
-            if(obj.getPosition().equals(position) && obj.isPushable()) {return obj;}
+    public GameObject getPushableObject(Point2D position) {
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position) && obj.isPushable()) {
+                return obj;
+            }
         }
         return null;
     }
 
+    public boolean isLethal(Point2D position) {
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position) && obj.isLethal()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void killPlayer() {
+        if (player != null) {
+            player.kill();
+            objects.remove(player);
+        }
+    }
 
     public boolean isWin() {
+        if (player == null || !player.isAlive()) {
+            return false;
+        }
         Point2D playerPos = player.getPosition();
-        for(GameObject obj : objects) {
-            if(obj.getPosition().equals(playerPos) && obj.isWin()) {return true;}
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(playerPos) && obj.isWin()) {
+                return true;
+            }
         }
         return false;
     }

@@ -20,8 +20,9 @@ public class GameEngine implements Observer {
     private int lastTickProcessed = 0;
     private int level = 0;
     private int totalMoves = 0;
+    private boolean gameWon = false;
 
-    private GameEngine(){
+    private GameEngine() {
         try {
             loadLevel(this.level);
 
@@ -31,12 +32,12 @@ public class GameEngine implements Observer {
         }
     }
 
-	public static GameEngine getInstance() {
-		return INSTANCE;
-	}
+    public static GameEngine getInstance() {
+        return INSTANCE;
+    }
 
     public void loadLevel(int level) throws FileNotFoundException {
-        String directory = ROOMS_DIRECTORY + "/room"+level+".txt";
+        String directory = ROOMS_DIRECTORY + "/room" + level + ".txt";
         currentRoom = Room.readRoom(new File(directory));
         totalMoves = 0;
         updateStatusMessage();
@@ -49,10 +50,13 @@ public class GameEngine implements Observer {
         if (ImageGUI.getInstance().wasKeyPressed()) {
             int k = ImageGUI.getInstance().keyPressed();
 
-            if(k == KeyEvent.VK_R){
+            if (k == KeyEvent.VK_R) {
                 try {
+                    if (gameWon) {
+                        level = 0;
+                        gameWon = false;
+                    }
                     loadLevel(this.level);
-                    updateGUI();
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -60,16 +64,14 @@ public class GameEngine implements Observer {
 
             if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN) {
                 Direction d = Direction.directionFor(k);
-                if(getPlayer().move(d,currentRoom)){
+                if (getPlayer().move(d, currentRoom)) {
                     totalMoves++;
-                    updateStatusMessage();
-                    if(currentRoom.isWin()){
-                        level++;
-                        try{
-                            loadLevel(level);
-                        }catch (FileNotFoundException e){
-                            throw new RuntimeException(e);
-                        }
+                    if (!getPlayer().isAlive()) {
+                        updateGUI();
+                        ImageGUI.getInstance().setStatusMessage("Morres-te! Prima R para reiniciar");
+                    } else {
+                        updateStatusMessage();
+                        handleVictory();
                     }
                 }
             }
@@ -101,8 +103,24 @@ public class GameEngine implements Observer {
         return currentRoom.getPlayer();
     }
 
-    public Room getCurrentRoom(){
+    public Room getCurrentRoom() {
         return currentRoom;
+    }
+
+    private void handleVictory() {
+        if (currentRoom.isWin()) {
+            if (level < 2) {
+                level++;
+                try {
+                    loadLevel(level);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                gameWon = true;
+                ImageGUI.getInstance().setStatusMessage("Parabens chegaste ao final do jogo | Prima R para reiniciar");
+            }
+        }
     }
 
 }

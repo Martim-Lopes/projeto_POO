@@ -19,6 +19,11 @@ public class Hole extends  GameObject {
         return withBox;
     }
 
-
-
+    @Override
+    public boolean isLethal() {
+        if (withBox) {
+            return false;
+        }
+        return true;
+    }
 }

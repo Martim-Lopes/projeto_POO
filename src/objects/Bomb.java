@@ -1,8 +1,16 @@
 package objects;
 
+import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
 public class Bomb extends GameObject {
+
+    private final int INIT_TICKS = 10;
+    private boolean lit = false;
+    private int ticksToExplode = INIT_TICKS;
+
+
+
     public Bomb(Point2D position) {
         super(position, "bomb", 10);
     }
@@ -21,11 +29,30 @@ public class Bomb extends GameObject {
 
     //ticks para explodir
     public int toExplode() {
-        return 0;
+        return INIT_TICKS;
     }
 
-    //rastilho aceso ou nao
-    public boolean isLit() {
-        return true;
+    public void ticks(Room r) {
+        if(!lit) return;
+
+        ticksToExplode--;
+        if(ticksToExplode <= 0) explode(r);
     }
+
+    //explodir as 8posicoes adjacentes
+    private void explode(Room r) {
+
+    }
+
+
+    public boolean isLit() {
+        return lit;
+    }
+
+    //verificar se foi puxado e alterar lit(lit = true)
+    public void wasPushed(GameObject pusher){
+
+
+    }
+
 }

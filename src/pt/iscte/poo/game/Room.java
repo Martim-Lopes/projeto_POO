@@ -37,7 +37,6 @@ public class Room {
     public List<GameObject> getObjects() {
         return objects;
     }
-
     public static Room readRoom(File f) throws FileNotFoundException {
         Room r = new Room();
         r.setName(f.getName());
@@ -97,5 +96,19 @@ public class Room {
             if(obj.getPosition().equals(position) && !obj.isPassable()) {return false;}
         }
         return true;
+    }
+
+    public boolean canPush(Point2D position) {
+        for(GameObject obj : objects) {
+            if(obj.getPosition().equals(position) && obj.isPushable()) {return true;}
+        }
+        return false;
+    }
+
+    public GameObject getObject(Point2D position) {
+        for(GameObject obj : objects) {
+            if(obj.getPosition().equals(position) && obj.isPushable()) {return obj;}
+        }
+        return null;
     }
 }

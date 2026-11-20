@@ -38,6 +38,10 @@ public abstract class GameObject implements ImageTile {
         return true;
     }
 
+    public boolean isPushable() {
+        return false;
+    }
+
 
 
 }

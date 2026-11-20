@@ -11,4 +11,10 @@ public class Box extends GameObject {
     public boolean isPassable() {
         return false;
     }
+
+    @Override
+    public boolean isPushable() {
+        return true;
+    }
+
 }

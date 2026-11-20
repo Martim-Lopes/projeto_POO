@@ -59,10 +59,8 @@ public class GameEngine implements Observer {
                 Direction d = Direction.directionFor(k);
                 if(getPlayer().move(d,currentRoom)){
                     totalMoves++;
-
+                    updateStatusMessage();
                 }
-                updateStatusMessage();
-                updateGUI();
             }
         }
         int t = ImageGUI.getInstance().getTicks();

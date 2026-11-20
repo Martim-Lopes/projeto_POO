@@ -27,6 +27,15 @@ public class Baba extends GameObject {
             setPosition(next);
             return true;
         }
+        if(room.canPush(next)){
+            Point2D beyond = next.plus(d.asVector());
+            GameObject pushable = room.getObject(next);
+            if(room.canMove(beyond)){
+                pushable.setPosition(beyond);
+                setPosition(next);
+                return true;
+            }
+        }
         return false;
     }
 

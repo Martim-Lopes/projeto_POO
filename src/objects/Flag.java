@@ -7,8 +7,4 @@ public class Flag extends GameObject{
         super(position, "flag", 10);
     }
 
-    @Override
-    public boolean isPassable() {
-        return false;
-    }
 }

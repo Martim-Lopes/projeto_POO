@@ -17,5 +17,4 @@ public class Box extends GameObject {
     public boolean isPushable() {
         return true;
     }
-
 }

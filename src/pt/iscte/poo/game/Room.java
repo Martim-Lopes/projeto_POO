@@ -71,7 +71,7 @@ public class Room {
             String[] line = sc.nextLine().split(",");
             String type = line[0].trim();
             Point2D pos = new Point2D(Integer.parseInt(line[1].trim()), Integer.parseInt(line[2].trim()));
-            // Caso à parte para o baba. Existe a opção de usarmos o instanceof, mas acho que é demasiado avançado
+            // Caso a parte para o baba. Existe a opção de usarmos o instanceof, mas acho que e demasiado avançado
             if (type.equals("baba")) {
                 Baba baba = new Baba(pos, line[3].trim());
                 r.player = baba;
@@ -121,6 +121,15 @@ public class Room {
         return null;
     }
 
+    public GameObject getLethalObjectAt(Point2D position) {
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position) && obj.isLethal()) {
+                return obj;
+            }
+        }
+        return null;
+    }
+
     public boolean isLethal(Point2D position) {
         for (GameObject obj : objects) {
             if (obj.getPosition().equals(position) && obj.isLethal()) {
@@ -149,4 +158,20 @@ public class Room {
         }
         return false;
     }
+
+    public void tryPutBox(GameObject pushedObj) {
+        if (!pushedObj.getName().equals("box")) {
+            return;
+        }
+        Point2D pos = pushedObj.getPosition();
+        GameObject hole = getLethalObjectAt(pos);
+        if (hole != null) {
+            objects.remove(hole);
+            objects.remove(pushedObj);
+            objects.add(new BoxInHole(pos));
+            GameEngine.getInstance().updateGUI();
+        }
+    }
+
+
 }

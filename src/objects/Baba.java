@@ -55,6 +55,7 @@ public class Baba extends GameObject {
         if (!chain.isEmpty() && room.canMove(cursor)) {
             for (GameObject obj : chain) {
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
+                room.tryPutBox(obj);
             }
             setPosition(next);
             if (room.isLethal(next)) {

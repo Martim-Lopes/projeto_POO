@@ -6,7 +6,7 @@ public class WordBox extends WordObject {
 
 
     public WordBox(Point2D position) {
-        super(position, "word-box");
+        super(position, "word-box", WordType.BOX);
     }
 
 }

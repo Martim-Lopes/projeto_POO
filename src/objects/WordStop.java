@@ -5,7 +5,7 @@ import pt.iscte.poo.utils.Point2D;
 public class WordStop extends WordObject {
 
     public WordStop(Point2D position) {
-        super(position, "word-stop");
+        super(position, "word-stop", WordType.STOP);
     }
 
 }

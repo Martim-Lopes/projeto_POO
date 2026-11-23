@@ -63,6 +63,7 @@ public class Baba extends GameObject {
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
             }
             room.tryPutBox(chain);
+            room.updateRules();
             setPosition(next);
             if (room.isLethal(next)) {
                 room.killPlayer();

@@ -162,14 +162,77 @@ public class Room {
     }
 
     public void tryPutBox(List<Pushable> pushedObjs) {
-        for(Pushable obj : pushedObjs) {
-            if(obj instanceof Box) {
+        for (Pushable obj : pushedObjs) {
+            if (obj instanceof Box) {
                 Point2D pos = obj.getPosition();
                 GameObject hole = getLethalObjectAt(pos);
                 if (hole != null) {
                     objects.remove(hole);
                     objects.remove(obj);
                     addObject(new BoxInHole(pos));
+                }
+            }
+        }
+    }
+
+
+    // Parte das palavras
+
+    public WordObject getWordAt(Point2D position) {
+        for (GameObject obj : getObject(position)) {
+            if (obj instanceof WordObject) {
+                return (WordObject) obj;
+            }
+        }
+        return null;
+    }
+
+    public void updateRules() {
+        for (GameObject obj : objects) {
+            if (obj instanceof Box) {
+                Box box = (Box) obj;
+                box.setPassable(true);
+                box.setPushable(false);
+                box.setWin(false);
+            }
+        }
+
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                checkRuleAt(new Point2D(x, y), 1, 0);
+                checkRuleAt(new Point2D(x, y), 0, 1);
+            }
+        }
+    }
+
+    private void checkRuleAt(Point2D start, int dx, int dy) {
+        WordObject w1 = getWordAt(start);
+        WordObject w2 = getWordAt(new Point2D(start.getX() + dx, start.getY() + dy));
+        WordObject w3 = getWordAt(new Point2D(start.getX() + 2 * dx, start.getY() + 2 * dy));
+
+        if (w1 != null && w2 != null && w3 != null && w1.getWordType() == WordType.BOX && w2.getWordType() == WordType.IS && w3.getWordType().isProperty()) {
+            applyRuleToBoxes(w3.getWordType());
+        }
+    }
+
+    private void applyRuleToBoxes(WordType property) {
+        for (GameObject obj : objects) {
+            if (obj instanceof Box) {
+                Box box = (Box) obj;
+                switch (property) {
+                    case MOVE:
+                        box.setPushable(true);
+                        box.setPassable(false);
+                        break;
+                    case STOP:
+                        box.setPassable(false);
+                        break;
+                    case WIN:
+                        box.setWin(true);
+
+                        break;
+                    default:
+                        break;
                 }
             }
         }

@@ -5,9 +5,18 @@ import pt.iscte.poo.utils.Point2D;
 
 public abstract class WordObject extends GameObject implements Pushable{
 
-    public WordObject(Point2D position, String imageName) {
+    private WordType wordType;
+
+    public WordObject(Point2D position, String imageName, WordType wordType) {
         super(position, imageName, 10);
+        this.wordType = wordType;
     }
+
+    public WordType getWordType() {
+        return wordType;
+    }
+
+
 
     @Override
     public boolean isPassable() {
@@ -20,4 +29,6 @@ public abstract class WordObject extends GameObject implements Pushable{
 
     @Override
     public void onPushed(boolean direct){}
+
+
 }

@@ -11,9 +11,8 @@ public abstract class WordObject extends GameObject implements Pushable{
 
     @Override
     public boolean isPassable() {
-        return true;
+        return false;
     }
-
     @Override
     public boolean canBePushed(Room room){
         return true;

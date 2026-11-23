@@ -164,13 +164,12 @@ public class Room {
     public void tryPutBox(List<Pushable> pushedObjs) {
         for(Pushable obj : pushedObjs) {
             if(obj instanceof Box) {
-                objects.remove(obj);
                 Point2D pos = obj.getPosition();
                 GameObject hole = getLethalObjectAt(pos);
                 if (hole != null) {
                     objects.remove(hole);
                     objects.remove(obj);
-                    objects.add(new BoxInHole(pos));
+                    addObject(new BoxInHole(pos));
                 }
             }
         }

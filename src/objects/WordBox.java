@@ -9,9 +9,4 @@ public class WordBox extends WordObject {
         super(position, "word-box");
     }
 
-    @Override
-    public boolean isPassable() {
-        return false;
-    }
-
 }

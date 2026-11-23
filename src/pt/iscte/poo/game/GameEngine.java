@@ -68,7 +68,7 @@ public class GameEngine implements Observer {
                     totalMoves++;
                     if (!getPlayer().isAlive()) {
                         updateGUI();
-                        ImageGUI.getInstance().setStatusMessage("Morres-te! Prima R para reiniciar");
+                        ImageGUI.getInstance().setStatusMessage("Morreste! Prima R para reiniciar");
                     } else {
                         updateStatusMessage();
                         handleVictory();
@@ -81,6 +81,7 @@ public class GameEngine implements Observer {
             processTick();
         }
         ImageGUI.getInstance().update();
+        updateGUI();
     }
 
     private void processTick() {

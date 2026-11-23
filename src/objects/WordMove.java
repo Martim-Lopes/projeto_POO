@@ -8,8 +8,4 @@ public class WordMove extends WordObject {
         super(position, "word-move");
     }
 
-    @Override
-    public boolean isPassable() {
-        return false;
-    }
 }

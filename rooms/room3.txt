@@ -1,0 +1,51 @@
+19,11
+XXXXXXXXXXXXXXXXXXX
+X                 X
+X                 X
+X                 X
+X                 X
+X                 X
+X                 X
+X                 X
+X                 X
+X                 X
+XXXXXXXXXXXXXXXXXXX
+
+flag,2,2
+flag,2,3
+flag,2,4
+flag,2,5
+flag,2,6
+flag,3,5
+flag,4,4
+flag,5,5
+flag,6,2
+flag,6,3
+flag,6,4
+flag,6,5
+flag,6,6
+flag,8,2
+flag,9,2
+flag,10,2
+flag,9,3
+flag,9,4
+flag,9,5
+flag,8,6
+flag,9,6
+flag,10,6
+flag,12,2
+flag,12,3
+flag,12,4
+flag,12,5
+flag,12,6
+flag,13,3
+flag,14,4
+flag,15,5
+flag,16,2
+flag,16,3
+flag,16,4
+flag,16,5
+flag,16,6
+baba,9,7,d
+wordWin,4,8
+wordWin,14,8

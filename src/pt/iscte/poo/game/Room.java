@@ -83,6 +83,7 @@ public class Room {
                 }
             }
         }
+        r.updateRules();
         sc.close();
         return r;
     }
@@ -237,6 +238,4 @@ public class Room {
             }
         }
     }
-
-
 }

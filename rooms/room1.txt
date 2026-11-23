@@ -10,7 +10,7 @@ XXXXXXXXXX XXXXXXXXX  X
 XXXXX      XXXXX  x   X
 Xg  XX XXX     Xg X   X
 X XX          gX g    X
-XXXXXX       g        X
+XXXX X       g        X
 X    X  g  gXx X    XXX
 X    X g     X X      X
 X  g X    g    XXXg   X

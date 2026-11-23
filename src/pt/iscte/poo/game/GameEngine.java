@@ -110,7 +110,7 @@ public class GameEngine implements Observer {
 
     private void handleVictory() {
         if (currentRoom.isWin()) {
-            if (level < 2) {
+            if (level < 3) {
                 level++;
                 try {
                     loadLevel(level);

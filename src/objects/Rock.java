@@ -1,9 +1,12 @@
 package objects;
 
+import pt.iscte.poo.game.Room;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
-public class Rock extends GameObject {
+import java.io.Serializable;
+
+public class Rock extends GameObject implements Pushable{
 
 
     public Rock(Point2D position) {
@@ -15,8 +18,13 @@ public class Rock extends GameObject {
         return false;
     }
 
+
     @Override
-    public boolean isPushable() {
+    public boolean canBePushed(Room room) {
         return true;
     }
+
+    @Override
+    public void onPushed(boolean direct) {}
+
 }

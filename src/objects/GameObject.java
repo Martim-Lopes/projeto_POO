@@ -39,19 +39,8 @@ public abstract class GameObject implements ImageTile {
         return true;
     }
 
-    public boolean isPushable() {
-        return false;
-    }
-
-    public boolean isWin(){
-        return isWin;
-    }
-
     public void setWin(boolean isWin){
         this.isWin = isWin;
     }
 
-    public boolean isLethal() {
-        return false;
-    }
 }

@@ -3,7 +3,7 @@ package objects;
 import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
-public class Bomb extends GameObject {
+public class Bomb extends GameObject implements Pushable {
 
     private final int INIT_TICKS = 10;
     private boolean lit = false;
@@ -55,4 +55,16 @@ public class Bomb extends GameObject {
 
     }
 
+    @Override
+    public boolean canBePushed(Room room) {
+        return true;
+    }
+
+    @Override
+    public void onPushed(boolean direct) {
+        if(!direct){
+            lit = true;
+            ticksToExplode = INIT_TICKS;
+        }
+    }
 }

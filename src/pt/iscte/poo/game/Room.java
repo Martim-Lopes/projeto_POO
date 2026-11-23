@@ -91,39 +91,46 @@ public class Room {
         return player;
     }
 
+    public List<GameObject> getObject(Point2D position) {
+        List<GameObject> get = new ArrayList<>();
+        for (GameObject obj : objects) {
+            if (obj.getPosition().equals(position)) {
+                get.add(obj);
+            }
+        }
+        return get;
+    }
+
     public boolean canMove(Point2D position) {
         if (position.getX() < 0 || position.getX() >= cols || position.getY() >= rows || position.getY() < 0) {
             return false;
         }
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position) && !obj.isPassable()) {
+        for (GameObject obj : getObject(position)) {
+            if (!obj.isPassable()) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean canPush(Point2D position) {
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position) && obj.isPushable()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public GameObject getPushableObject(Point2D position) {
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position) && obj.isPushable()) {
-                return obj;
+    public Pushable getPushableObject(Point2D position) {
+        for (GameObject obj : getObject(position)) {
+            if (obj instanceof Pushable) {
+                if (((Pushable) obj).canBePushed(this)) {
+                    return (Pushable) obj;
+                }
             }
         }
         return null;
     }
 
+    public boolean canPush(Point2D position) {
+        return getPushableObject(position) != null;
+    }
+
     public GameObject getLethalObjectAt(Point2D position) {
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position) && obj.isLethal()) {
+        for (GameObject obj : getObject(position)) {
+            if (obj.isLethal()) {
                 return obj;
             }
         }
@@ -131,12 +138,7 @@ public class Room {
     }
 
     public boolean isLethal(Point2D position) {
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position) && obj.isLethal()) {
-                return true;
-            }
-        }
-        return false;
+        return getLethalObjectAt(position) != null;
     }
 
     public void killPlayer() {
@@ -159,17 +161,18 @@ public class Room {
         return false;
     }
 
-    public void tryPutBox(GameObject pushedObj) {
-        if (!pushedObj.getName().equals("box")) {
-            return;
-        }
-        Point2D pos = pushedObj.getPosition();
-        GameObject hole = getLethalObjectAt(pos);
-        if (hole != null) {
-            objects.remove(hole);
-            objects.remove(pushedObj);
-            objects.add(new BoxInHole(pos));
-            GameEngine.getInstance().updateGUI();
+    public void tryPutBox(List<Pushable> pushedObjs) {
+        for(Pushable obj : pushedObjs) {
+            if(obj instanceof Box) {
+                objects.remove(obj);
+                Point2D pos = obj.getPosition();
+                GameObject hole = getLethalObjectAt(pos);
+                if (hole != null) {
+                    objects.remove(hole);
+                    objects.remove(obj);
+                    objects.add(new BoxInHole(pos));
+                }
+            }
         }
     }
 

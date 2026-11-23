@@ -46,16 +46,16 @@ public class Baba extends GameObject {
             }
             return true;
         }
-        List<GameObject> chain = new ArrayList<>();
+        List<Pushable> chain = new ArrayList<>();
         Point2D cursor = next;
         while (room.canPush(cursor)) {
             chain.add(room.getPushableObject(cursor));
             cursor = cursor.plus(d.asVector());
         }
         if (!chain.isEmpty() && room.canMove(cursor)) {
-            for (GameObject obj : chain) {
+            for (Pushable obj : chain) {
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
-                room.tryPutBox(obj);
+                room.tryPutBox(chain);
             }
             setPosition(next);
             if (room.isLethal(next)) {

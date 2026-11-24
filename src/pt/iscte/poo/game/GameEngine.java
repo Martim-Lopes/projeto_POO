@@ -96,8 +96,7 @@ public class GameEngine implements Observer {
     }
 
     private void updateStatusMessage() {
-        ImageGUI.getInstance().setStatusMessage(
-                "Level " + level + " | Total moves: " + totalMoves + " | R: reiniciar");
+        ImageGUI.getInstance().setStatusMessage("Level " + level + " | Total moves: " + totalMoves + " | R: reiniciar");
     }
 
     public Baba getPlayer() {
@@ -123,5 +122,4 @@ public class GameEngine implements Observer {
             }
         }
     }
-
 }

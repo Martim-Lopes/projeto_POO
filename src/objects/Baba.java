@@ -9,7 +9,7 @@ import pt.iscte.poo.utils.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Baba extends GameObject {
+public class Baba extends GameObject{
 
     private String direction;
     private boolean alive = true;
@@ -30,7 +30,6 @@ public class Baba extends GameObject {
 
     public void kill() {
         alive = false;
-
     }
 
     public boolean move(Direction d, Room room) {

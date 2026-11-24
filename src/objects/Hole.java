@@ -11,11 +11,6 @@ public class Hole extends  GameObject implements Interactive {
     }
 
     @Override
-    public boolean isLethal() {
-        return true;
-    }
-
-    @Override
     public void onPlayerEnter(Room room) {
         room.killPlayer();
     }

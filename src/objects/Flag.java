@@ -1,8 +1,9 @@
 package objects;
 
+import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
-public class Flag extends GameObject{
+public class Flag extends GameObject implements Interactive{
 
     private boolean win = true;
 
@@ -10,12 +11,12 @@ public class Flag extends GameObject{
         super(position, "flag", 10);
     }
 
-    @Override
-    public boolean isWin() {
-        return win;
-    }
-
     public void  setWin(boolean win){
         this.win = win;
+    }
+
+    @Override
+    public void onPlayerEnter(Room room) {
+        room.setWin(win);
     }
 }

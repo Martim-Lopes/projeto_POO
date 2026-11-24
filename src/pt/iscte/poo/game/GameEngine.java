@@ -67,8 +67,13 @@ public class GameEngine implements Observer {
                 if (getPlayer().move(d, currentRoom)) {
                     totalMoves++;
                     if (!getPlayer().isAlive()) {
-                        updateGUI();
-                        ImageGUI.getInstance().setStatusMessage("Morreste! Prima R para reiniciar");
+                        try {
+                            loadLevel(this.level);
+                            updateGUI();
+                            ImageGUI.getInstance().setStatusMessage("Morreste! Prima R para reiniciar");
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
                     } else {
                         updateStatusMessage();
                         handleVictory();

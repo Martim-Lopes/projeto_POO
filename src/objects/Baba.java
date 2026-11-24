@@ -40,8 +40,8 @@ public class Baba extends GameObject{
         Point2D next = getPosition().plus(d.asVector());
         if (room.canMove(next)) {
             setPosition(next);
-            if (room.isLethal(next)) {
-                room.killPlayer();
+            if (room.isInteractive(next)) {
+                room.getInteractiveObject(next).onPlayerEnter(room);
             }
             return true;
         }
@@ -64,9 +64,6 @@ public class Baba extends GameObject{
             room.tryPutBox(chain);
             room.updateRules();
             setPosition(next);
-            if (room.isLethal(next)) {
-                room.killPlayer();
-            }
             return true;
         }
         return false;

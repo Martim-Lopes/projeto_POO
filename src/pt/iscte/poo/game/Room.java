@@ -16,6 +16,7 @@ public class Room {
     private Baba player;
     private int cols;
     private int rows;
+    private boolean win = false;
 
     public Room() {
         objects = new ArrayList<>();
@@ -129,17 +130,17 @@ public class Room {
         return getPushableObject(position) != null;
     }
 
-    public GameObject getLethalObjectAt(Point2D position) {
+    public Interactive getInteractiveObject(Point2D position) {
         for (GameObject obj : getObject(position)) {
-            if (obj.isLethal()) {
-                return obj;
+            if(obj instanceof Interactive){
+                return (Interactive) obj;
             }
         }
         return null;
     }
 
-    public boolean isLethal(Point2D position) {
-        return getLethalObjectAt(position) != null;
+    public boolean isInteractive(Point2D position) {
+        return getInteractiveObject(position) != null;
     }
 
     public void killPlayer() {
@@ -149,25 +150,23 @@ public class Room {
         }
     }
 
+    public void setWin(boolean win){
+        this.win = win;
+    }
+
     public boolean isWin() {
         if (player == null || !player.isAlive()) {
             return false;
         }
-        Point2D playerPos = player.getPosition();
-        for (GameObject obj : objects) {
-            if (obj.getPosition().equals(playerPos) && obj.isWin()) {
-                return true;
-            }
-        }
-        return false;
+        return win;
     }
 
     public void tryPutBox(List<Pushable> pushedObjs) {
         for (Pushable obj : pushedObjs) {
             if (obj instanceof Box) {
                 Point2D pos = obj.getPosition();
-                GameObject hole = getLethalObjectAt(pos);
-                if (hole != null) {
+                Interactive hole = getInteractiveObject(pos);
+                if (hole instanceof Hole) {
                     objects.remove(hole);
                     objects.remove(obj);
                     addObject(new BoxInHole(pos));

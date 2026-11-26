@@ -17,6 +17,8 @@ public class Room {
     private int cols;
     private int rows;
     private boolean win = false;
+    private boolean guiNeedsUpdate = false;
+    private final Rules rules = new Rules();
 
     public Room() {
         objects = new ArrayList<>();
@@ -32,6 +34,21 @@ public class Room {
 
     public void addObject(GameObject obj) {
         objects.add(obj);
+        guiNeedsUpdate = true;
+    }
+
+    public void removeObject(GameObject obj) {
+        objects.remove(obj);
+        guiNeedsUpdate = true;
+    }
+
+    // Função para se ver é preciso atualizar o mapa. Assim não precisamos de estar sempre a atualizar a mapa
+    public boolean needsGuiUpdate() {
+        return guiNeedsUpdate;
+    }
+
+    public void clearGuiUpdate() {
+        guiNeedsUpdate = false;
     }
 
     public List<GameObject> getObjects() {
@@ -132,7 +149,7 @@ public class Room {
 
     public Interactive getInteractiveObject(Point2D position) {
         for (GameObject obj : getObject(position)) {
-            if(obj instanceof Interactive){
+            if (obj instanceof Interactive) {
                 return (Interactive) obj;
             }
         }
@@ -146,11 +163,11 @@ public class Room {
     public void killPlayer() {
         if (player != null) {
             player.kill();
-            objects.remove(player);
+            removeObject(player);
         }
     }
 
-    public void setWin(boolean win){
+    public void setWin(boolean win) {
         this.win = win;
     }
 
@@ -167,8 +184,8 @@ public class Room {
                 Point2D pos = obj.getPosition();
                 Interactive hole = getInteractiveObject(pos);
                 if (hole instanceof Hole) {
-                    objects.remove(hole);
-                    objects.remove(obj);
+                    removeObject((GameObject) hole);
+                    removeObject((GameObject) obj);
                     addObject(new BoxInHole(pos));
                 }
             }
@@ -187,54 +204,35 @@ public class Room {
         return null;
     }
 
+    // dá update usando a class rules e depois percorre a lista das rules
     public void updateRules() {
+        rules.update(this);
+        applyRuleToBoxes();
+    }
+
+    // A função apply fica no room para ser mais fácil atualizar as propriedades dos objetos
+    private void applyRuleToBoxes() {
         for (GameObject obj : objects) {
             if (obj instanceof Box) {
                 Box box = (Box) obj;
                 box.setPassable(true);
                 box.setPushable(false);
                 box.setWin(false);
-            }
-        }
-
-        for (int x = 0; x < cols; x++) {
-            for (int y = 0; y < rows; y++) {
-                checkRuleAt(new Point2D(x, y), 1, 0);
-                checkRuleAt(new Point2D(x, y), 0, 1);
-            }
-        }
-    }
-
-    private void checkRuleAt(Point2D start, int dx, int dy) {
-        WordObject w1 = getWordAt(start);
-        WordObject w2 = getWordAt(new Point2D(start.getX() + dx, start.getY() + dy));
-        WordObject w3 = getWordAt(new Point2D(start.getX() + 2 * dx, start.getY() + 2 * dy));
-
-        if (w1 != null && w2 != null && w3 != null && w1.getWordType() == WordType.BOX && w2.getWordType() == WordType.IS && w3.getWordType().isProperty()) {
-            applyRuleToBoxes(w3.getWordType());
-        }
-    }
-
-    private void applyRuleToBoxes(WordType property) {
-        for (GameObject obj : objects) {
-            if (obj instanceof Box) {
-                Box box = (Box) obj;
-                switch (property) {
-                    case MOVE:
-                        box.setPushable(true);
-                        box.setPassable(false);
-                        break;
-                    case STOP:
-                        box.setPassable(false);
-                        break;
-                    case WIN:
-                        box.setWin(true);
-
-                        break;
-                    default:
-                        break;
+                if (rules.isActive(WordType.STOP)) {
+                    box.setPassable(false);
+                }
+                if (rules.isActive(WordType.MOVE)) {
+                    box.setPassable(false);
+                    box.setPushable(true);
+                }
+                if (rules.isActive(WordType.WIN)) {
+                    box.setWin(true);
                 }
             }
         }
+    }
+
+    public boolean hasContradiction() {
+        return rules.hasContradiction();
     }
 }

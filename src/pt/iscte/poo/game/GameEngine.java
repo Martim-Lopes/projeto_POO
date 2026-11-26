@@ -51,15 +51,9 @@ public class GameEngine implements Observer {
             int k = ImageGUI.getInstance().keyPressed();
 
             if (k == KeyEvent.VK_R) {
-                try {
-                    if (gameWon) {
-                        level = 0;
-                        gameWon = false;
-                    }
-                    loadLevel(this.level);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                restart();
+                //está função pode ser util para dar informações ao joogador
+                //ImageGUI.getInstance().showMessage("Teste", "Isto é um teste");
             }
 
             if (k == KeyEvent.VK_LEFT || k == KeyEvent.VK_RIGHT || k == KeyEvent.VK_UP || k == KeyEvent.VK_DOWN) {
@@ -74,7 +68,10 @@ public class GameEngine implements Observer {
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
-                    } else {
+                    } else if (currentRoom.hasContradiction()) {
+                        //ver se as regras das palavras são contraditórias ou se estão repetidas
+                        restart();
+                    } else if(!gameWon) {
                         updateStatusMessage();
                         handleVictory();
                     }
@@ -85,8 +82,11 @@ public class GameEngine implements Observer {
         while (lastTickProcessed < t) {
             processTick();
         }
+        // ver se é preciso atualizar
+        if (currentRoom != null && currentRoom.needsGuiUpdate()) {
+            updateGUI();
+        }
         ImageGUI.getInstance().update();
-        updateGUI();
     }
 
     private void processTick() {
@@ -97,6 +97,7 @@ public class GameEngine implements Observer {
         if (currentRoom != null) {
             ImageGUI.getInstance().clearImages();
             ImageGUI.getInstance().addImages(currentRoom.getObjects());
+            currentRoom.clearGuiUpdate();
         }
     }
 
@@ -112,9 +113,21 @@ public class GameEngine implements Observer {
         return currentRoom;
     }
 
+    public void restart(){
+        try {
+            if (gameWon) {
+                level = 0;
+                gameWon = false;
+            }
+            loadLevel(this.level);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void handleVictory() {
         if (currentRoom.isWin()) {
-            if (level < 3) {
+            if (level < 2) {
                 level++;
                 try {
                     loadLevel(level);
@@ -122,7 +135,17 @@ public class GameEngine implements Observer {
                     throw new RuntimeException(e);
                 }
             } else {
+                // vitoria, ler mapa de vitoria
                 gameWon = true;
+                try{
+                    File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
+                    if (winFile.exists()) {
+                        currentRoom = Room.readRoom(winFile);
+                        updateGUI();
+                    }
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 ImageGUI.getInstance().setStatusMessage("Parabens chegaste ao final do jogo | Prima R para reiniciar");
             }
         }

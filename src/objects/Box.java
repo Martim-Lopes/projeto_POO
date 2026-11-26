@@ -10,7 +10,7 @@ public class Box extends GameObject implements Pushable, Interactive{
     private boolean win = false;
 
     public Box(Point2D position) {
-        super(position, "box", 10);
+        super(position, "box", 20);
     }
 
     @Override
@@ -42,7 +42,6 @@ public class Box extends GameObject implements Pushable, Interactive{
     @Override
     public void onPushed(boolean direct) {
     }
-
     @Override
     public void onPlayerEnter(Room room) {
         room.setWin(win);

@@ -9,6 +9,7 @@ public class Flag extends GameObject implements Interactive{
 
     public Flag(Point2D position) {
         super(position, "flag", 10);
+        setWin(true);
     }
 
     public void  setWin(boolean win){

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Classe para leitura das palavras. Evita estar a encher o room de código
+// sugestão de AI. Originalmente todas as funções estavam no room
+// como não existia List<WordType> era mais complicado implementar o reinicio do nivel ao haver contradições
 
 public class Rules {
 

@@ -60,6 +60,10 @@ public class Baba extends GameObject{
         if (!chain.isEmpty() && room.canMove(cursor)) {
             for (Pushable obj : chain) {
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
+                if(chain.indexOf(obj) == 0){
+                    obj.onPushed(true);
+                }
+                obj.onPushed(false);
             }
             room.tryPutBox(chain);
             room.updateRules();

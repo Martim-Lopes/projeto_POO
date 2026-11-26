@@ -27,6 +27,8 @@ public abstract class WordObject extends GameObject implements Pushable{
         return true;
     }
 
+
+    //função sugeria por AI para facilitar a implementação da bomba
     @Override
     public void onPushed(boolean direct){}
 

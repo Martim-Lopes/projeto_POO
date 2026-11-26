@@ -63,8 +63,6 @@ public class GameEngine implements Observer {
                     if (!getPlayer().isAlive()) {
                         try {
                             loadLevel(this.level);
-                            updateGUI();
-                            ImageGUI.getInstance().setStatusMessage("Morreste! Prima R para reiniciar");
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -81,6 +79,7 @@ public class GameEngine implements Observer {
         int t = ImageGUI.getInstance().getTicks();
         while (lastTickProcessed < t) {
             processTick();
+            currentRoom.onTick();
         }
         // ver se é preciso atualizar
         if (currentRoom != null && currentRoom.needsGuiUpdate()) {

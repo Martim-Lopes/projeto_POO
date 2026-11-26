@@ -6,7 +6,7 @@ import pt.iscte.poo.utils.Point2D;
 public abstract class GameObject implements ImageTile {
 
     private Point2D position;
-    private final String imageName;
+    private String imageName;
     private final int layer;
 
     public GameObject(Point2D position, String imageName, int layer) {
@@ -36,5 +36,9 @@ public abstract class GameObject implements ImageTile {
 
     public boolean isPassable() {
         return true;
+    }
+
+    public void setName(String imageName) {
+        this.imageName = imageName;
     }
 }

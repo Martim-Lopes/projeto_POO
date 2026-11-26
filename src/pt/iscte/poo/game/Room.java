@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import objects.*;
+import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public class Room {
@@ -113,7 +114,7 @@ public class Room {
     public List<GameObject> getObject(Point2D position) {
         List<GameObject> get = new ArrayList<>();
         for (GameObject obj : objects) {
-            if (obj.getPosition().equals(position)) {
+            if (obj.getPosition().equals(position) && !(obj instanceof Dirt)) {
                 get.add(obj);
             }
         }
@@ -234,5 +235,16 @@ public class Room {
 
     public boolean hasContradiction() {
         return rules.hasContradiction();
+    }
+
+
+    //funções bomba
+
+    public void onTick() {
+        for (GameObject obj : new ArrayList<>(objects)) {
+            if (obj instanceof Bomb) {
+                ((Bomb) obj).ticks(this);
+            }
+        }
     }
 }

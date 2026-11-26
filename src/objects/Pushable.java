@@ -9,5 +9,4 @@ public interface Pushable {
     void onPushed(boolean direct);
     Point2D getPosition();
     void setPosition(Point2D position);
-
 }

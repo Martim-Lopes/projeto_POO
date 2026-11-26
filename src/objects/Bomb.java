@@ -3,16 +3,18 @@ package objects;
 import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
+import java.util.List;
+
 public class Bomb extends GameObject implements Pushable {
 
-    private final int INIT_TICKS = 10;
+    private static final int INIT_TICKS = 10;
     private boolean lit = false;
     private int ticksToExplode = INIT_TICKS;
 
 
 
     public Bomb(Point2D position) {
-        super(position, "bomb", 10);
+        super(position, "bomb", 20);
     }
 
     @Override
@@ -26,33 +28,10 @@ public class Bomb extends GameObject implements Pushable {
     //passa a CrackedWall). Enquanto o rastilho arde, pode continuar a ser empurrada.
     // Se for empurrada indiretamente por outros objetos, o rastilho não acende.
 
-
-    //ticks para explodir
-    public int toExplode() {
-        return INIT_TICKS;
-    }
-
     public void ticks(Room r) {
         if(!lit) return;
-
         ticksToExplode--;
         if(ticksToExplode <= 0) explode(r);
-    }
-
-    //explodir as 8posicoes adjacentes
-    private void explode(Room r) {
-
-    }
-
-
-    public boolean isLit() {
-        return lit;
-    }
-
-    //verificar se foi puxado e alterar lit(lit = true)
-    public void wasPushed(GameObject pusher){
-
-
     }
 
     @Override
@@ -62,9 +41,28 @@ public class Bomb extends GameObject implements Pushable {
 
     @Override
     public void onPushed(boolean direct) {
-        if(!direct){
+        if(direct){
             lit = true;
             ticksToExplode = INIT_TICKS;
         }
+    }
+
+    private void explode(Room r){
+        List<Point2D> pontos = this.getPosition().getWideNeighbourhoodPoints();
+        for(Point2D ponto : pontos){
+            List<GameObject> objs = r.getObject(ponto);
+            for(GameObject obj : r.getObject(ponto)){
+                if(obj instanceof Wall){
+                    r.removeObject((GameObject) obj);
+                    r.addObject(new CrackedWall(ponto));
+                }
+                else if(obj instanceof Baba){
+                    r.killPlayer();
+                }else{
+                    r.removeObject((GameObject) obj);
+                }
+            }
+        }
+        this.setName("bomb10");
     }
 }

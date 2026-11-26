@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import objects.Baba;
-import objects.GameObject;
 import pt.iscte.poo.gui.ImageGUI;
 import pt.iscte.poo.observer.Observed;
 import pt.iscte.poo.observer.Observer;
@@ -51,7 +50,7 @@ public class GameEngine implements Observer {
             int k = ImageGUI.getInstance().keyPressed();
 
             if (k == KeyEvent.VK_R) {
-                restart();
+                restart("A reiniciar", "O jogo está a reiniciar");
                 //está função pode ser util para dar informações ao joogador
                 //ImageGUI.getInstance().showMessage("Teste", "Isto é um teste");
             }
@@ -61,15 +60,11 @@ public class GameEngine implements Observer {
                 if (getPlayer().move(d, currentRoom)) {
                     totalMoves++;
                     if (!getPlayer().isAlive()) {
-                        try {
-                            loadLevel(this.level);
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
+                        restart("Morreste", "Tem mais cuidado para a próxima!");
                     } else if (currentRoom.hasContradiction()) {
                         //ver se as regras das palavras são contraditórias ou se estão repetidas
-                        restart();
-                    } else if(!gameWon) {
+                        restart("Morreste", "Não é permitido ter duas condições em simultâneo");
+                    } else if (!gameWon) {
                         updateStatusMessage();
                         handleVictory();
                     }
@@ -84,6 +79,9 @@ public class GameEngine implements Observer {
         // ver se é preciso atualizar
         if (currentRoom != null && currentRoom.needsGuiUpdate()) {
             updateGUI();
+        }
+        if (currentRoom != null && !getPlayer().isAlive()) {
+            restart("Morreste", "Tem mais cuidado para a próxima!");
         }
         ImageGUI.getInstance().update();
     }
@@ -112,13 +110,15 @@ public class GameEngine implements Observer {
         return currentRoom;
     }
 
-    public void restart(){
+    public void restart(String messageTitle, String message) {
         try {
             if (gameWon) {
                 level = 0;
                 gameWon = false;
             }
             loadLevel(this.level);
+            ImageGUI.getInstance().showMessage(messageTitle, message);
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -136,7 +136,7 @@ public class GameEngine implements Observer {
             } else {
                 // vitoria, ler mapa de vitoria
                 gameWon = true;
-                try{
+                try {
                     File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
                     if (winFile.exists()) {
                         currentRoom = Room.readRoom(winFile);

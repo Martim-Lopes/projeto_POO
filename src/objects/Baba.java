@@ -9,7 +9,7 @@ import pt.iscte.poo.utils.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Baba extends GameObject{
+public class Baba extends GameObject {
 
     private String direction;
     private boolean alive = true;
@@ -49,7 +49,7 @@ public class Baba extends GameObject{
         Point2D cursor = next;
         while (room.canPush(cursor)) {
             Pushable push = room.getPushableObject(cursor);
-            if(push instanceof WordObject) {
+            if (push instanceof WordObject) {
                 chain.add(push);
                 cursor = cursor.plus(d.asVector());
                 break;
@@ -60,10 +60,11 @@ public class Baba extends GameObject{
         if (!chain.isEmpty() && room.canMove(cursor)) {
             for (Pushable obj : chain) {
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
-                if(chain.indexOf(obj) == 0){
+                if (chain.indexOf(obj) == 0) {
                     obj.onPushed(true);
+                } else {
+                    obj.onPushed(false);
                 }
-                obj.onPushed(false);
             }
             room.tryPutBox(chain);
             room.updateRules();

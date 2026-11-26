@@ -10,9 +10,6 @@ public class Bomb extends GameObject implements Pushable {
     private static final int INIT_TICKS = 10;
     private boolean lit = false;
     private int ticksToExplode = INIT_TICKS;
-    private boolean pushed = true;
-    private boolean passable = false;
-
 
     public Bomb(Point2D position) {
         super(position, "bomb", 20);
@@ -20,20 +17,12 @@ public class Bomb extends GameObject implements Pushable {
 
     @Override
     public boolean isPassable() {
-        return passable;
+        return false;
     }
 
     @Override
     public boolean canBePushed(Room room) {
-        return pushed;
-    }
-
-    public void setPushable(boolean pushed) {
-        this.pushed = pushed;
-    }
-
-    public void setPassable(boolean passable) {
-        this.passable = passable;
+        return true;
     }
 
 
@@ -45,6 +34,23 @@ public class Bomb extends GameObject implements Pushable {
     public void ticks(Room r) {
         if (!lit) return;
         ticksToExplode--;
+        switch (ticksToExplode) {
+            case (9):
+                setName("bomb1");
+                break;
+            case (7):
+                setName("bomb2");
+                break;
+            case (5):
+                setName("bomb3");
+                break;
+            case (3):
+                setName("bomb4");
+                break;
+            case (1):
+                setName("bomb5");
+                break;
+        }
         if (ticksToExplode <= 0) {
             explode(r);
         }
@@ -60,6 +66,7 @@ public class Bomb extends GameObject implements Pushable {
 
     private void explode(Room r) {
         List<Point2D> pontos = this.getPosition().getWideNeighbourhoodPoints();
+        r.removeObject(this);
         for (Point2D ponto : pontos) {
             List<GameObject> objs = r.getObject(ponto);
             for (GameObject obj : r.getObject(ponto)) {
@@ -74,9 +81,5 @@ public class Bomb extends GameObject implements Pushable {
             }
         }
         r.updateRules();
-        lit = false;
-        setPassable(true);
-        setPushable(false);
-        this.setName("bomb10");
     }
 }

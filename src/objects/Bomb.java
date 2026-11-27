@@ -21,6 +21,12 @@ public class Bomb extends GameObject implements Pushable {
     }
 
     @Override
+    public void onFallInHole(Hole hole, Room room) {
+        lit = true;
+        ticksToExplode = INIT_TICKS;
+    }
+
+    @Override
     public boolean canBePushed(Room room) {
         return true;
     }

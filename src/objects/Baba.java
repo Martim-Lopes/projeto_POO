@@ -24,6 +24,12 @@ public class Baba extends GameObject {
         return "baba-" + direction;
     }
 
+    @Override
+    public void onFallInHole(Hole hole, Room room) {
+        room.removeObject(this);
+        this.alive = false;
+    }
+
     public boolean isAlive() {
         return alive;
     }
@@ -47,11 +53,13 @@ public class Baba extends GameObject {
         }
         List<Pushable> chain = new ArrayList<>();
         Point2D cursor = next;
+        int consecutiveWords = 0;
         while (room.canPush(cursor)) {
             Pushable push = room.getPushableObject(cursor);
             if (push instanceof WordObject) {
-                chain.add(push);
-                cursor = cursor.plus(d.asVector());
+                consecutiveWords++;
+            }
+            if (consecutiveWords > 1) {
                 break;
             }
             chain.add(push);
@@ -66,9 +74,10 @@ public class Baba extends GameObject {
                     obj.onPushed(false);
                 }
             }
-            room.tryPutBox(chain);
+            room.handleHoleInteractions(chain);
             room.updateRules();
             setPosition(next);
+            room.triggerInteractions(next);
             if (room.isInteractive(next)) {
                 room.getInteractiveObject(next).onPlayerEnter(room);
             }

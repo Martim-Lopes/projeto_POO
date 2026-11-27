@@ -20,4 +20,9 @@ public class Flag extends GameObject implements Interactive{
     public void onPlayerEnter(Room room) {
         room.setWin(win);
     }
+
+    @Override
+    public void onFallInHole(Hole hole, Room room) {
+        room.removeObject(this);
+    }
 }

@@ -22,25 +22,23 @@ public class GameEngine implements Observer {
     private boolean gameWon = false;
 
     private GameEngine() {
-        try {
-            loadLevel(this.level);
-
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        loadLevel(this.level);
     }
 
     public static GameEngine getInstance() {
         return INSTANCE;
     }
 
-    public void loadLevel(int level) throws FileNotFoundException {
-        String directory = ROOMS_DIRECTORY + "/room" + level + ".txt";
-        currentRoom = Room.readRoom(new File(directory));
-        totalMoves = 0;
-        updateStatusMessage();
-        updateGUI();
+    public void loadLevel(int level) {
+        try {
+            File file = new File(ROOMS_DIRECTORY + "/room" + level + ".txt");
+            currentRoom = Room.readRoom(file);
+            totalMoves = 0;
+            updateGUI();
+            updateStatusMessage();
+        } catch (FileNotFoundException e) {
+            ImageGUI.getInstance().showMessage("Erro", "Nivel nao encontrado: room" + level + ".txt");
+        }
     }
 
     @Override
@@ -111,42 +109,35 @@ public class GameEngine implements Observer {
     }
 
     public void restart(String messageTitle, String message) {
-        try {
-            if (gameWon) {
-                level = 0;
-                gameWon = false;
-            }
-            loadLevel(this.level);
-            ImageGUI.getInstance().showMessage(messageTitle, message);
-
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        if (gameWon) {
+            level = 0;
+            gameWon = false;
         }
+        loadLevel(this.level);
+        ImageGUI.getInstance().showMessage(messageTitle, message);
+
     }
 
     private void handleVictory() {
-        if (currentRoom.isWin()) {
-            if (level < 2) {
-                level++;
-                try {
-                    loadLevel(level);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
+        if (!currentRoom.isWin()) {
+            return;
+        }
+        File nextRoom = new File("rooms/room" + (level + 1) + ".txt");
+        if (nextRoom.exists()) {
+            level++;
+            loadLevel(level);
+        } else {
+            try {
+                File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
+                if (winFile.exists()) {
+                    currentRoom = Room.readRoom(winFile);
+                    updateGUI();
                 }
-            } else {
-                // vitoria, ler mapa de vitoria
-                gameWon = true;
-                try {
-                    File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
-                    if (winFile.exists()) {
-                        currentRoom = Room.readRoom(winFile);
-                        updateGUI();
-                    }
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                ImageGUI.getInstance().setStatusMessage("Parabens chegaste ao final do jogo | Prima R para reiniciar");
+            } catch (FileNotFoundException e) {
+                ImageGUI.getInstance().showMessage("Erro", "Mapa Win nao encontrado!");
             }
+            gameWon = true;
+            ImageGUI.getInstance().setStatusMessage("Parabens chegaste ao final do jogo | Prime R para reiniciar");
         }
     }
 }

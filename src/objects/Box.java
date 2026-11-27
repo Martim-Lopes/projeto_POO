@@ -42,8 +42,16 @@ public class Box extends GameObject implements Pushable, Interactive{
     @Override
     public void onPushed(boolean direct) {
     }
+
     @Override
     public void onPlayerEnter(Room room) {
         room.setWin(win);
+    }
+
+    @Override
+    public void onFallInHole(Hole hole, Room room) {
+        room.addObject(new BoxInHole(this.getPosition()));
+        room.removeObject(this);
+        room.removeObject(hole);
     }
 }

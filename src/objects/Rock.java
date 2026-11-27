@@ -18,6 +18,11 @@ public class Rock extends GameObject implements Pushable{
         return false;
     }
 
+    @Override
+    public void onFallInHole(Hole hole, Room room) {
+        room.removeObject(this);
+    }
+
 
     @Override
     public boolean canBePushed(Room room) {

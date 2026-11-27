@@ -32,5 +32,10 @@ public abstract class WordObject extends GameObject implements Pushable{
     @Override
     public void onPushed(boolean direct){}
 
+    @Override
+    public void onFallInHole(Hole hole, Room room) {
+        room.removeObject(this);
+    }
+
 
 }

@@ -62,8 +62,8 @@ public class Room {
         Scanner sc = new Scanner(f);
 
         String[] s = sc.nextLine().split(",");
-        r.cols = Integer.parseInt(s[0]);
-        r.rows = Integer.parseInt(s[1]);
+        r.cols = Integer.parseInt(s[0].trim());
+        r.rows = Integer.parseInt(s[1].trim());
 
         for (int i = 0; i < r.cols; i++) {
             for (int j = 0; j < r.rows; j++) {
@@ -87,19 +87,14 @@ public class Room {
             j++;
         }
         while (sc.hasNextLine()) {
-            String[] line = sc.nextLine().split(",");
-            String type = line[0].trim();
-            Point2D pos = new Point2D(Integer.parseInt(line[1].trim()), Integer.parseInt(line[2].trim()));
-            // Caso a parte para o baba. Existe a opção de usarmos o instanceof, mas acho que e demasiado avançado
-            if (type.equals("baba")) {
-                Baba baba = new Baba(pos, line[3].trim());
-                r.player = baba;
-                r.addObject(baba);
-            } else {
-                RoomObjects objs = RoomObjects.fromString(type);
-                if (objs != null) {
-                    r.addObject(objs.create(pos));
-                }
+            String line = sc.nextLine().trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+            GameObject obj = RoomObjects.createFromLine(line);
+            r.addObject(obj);
+            if (obj instanceof Baba) {
+                r.player = (Baba) obj;
             }
         }
         r.updateRules();
@@ -161,13 +156,6 @@ public class Room {
         return getInteractiveObject(position) != null;
     }
 
-    public void killPlayer() {
-        if (player != null) {
-            player.kill();
-            removeObject(player);
-        }
-    }
-
     public void setWin(boolean win) {
         this.win = win;
     }
@@ -179,22 +167,27 @@ public class Room {
         return win;
     }
 
-    public void tryPutBox(List<Pushable> pushedObjs) {
-        for (Pushable obj : pushedObjs) {
-            if (obj instanceof Box) {
-                Point2D pos = obj.getPosition();
-                Interactive hole = getInteractiveObject(pos);
-                if (hole instanceof Hole) {
-                    removeObject((GameObject) hole);
-                    removeObject((GameObject) obj);
-                    addObject(new BoxInHole(pos));
-                }
+    public void killPlayer() {
+        if (player != null) {
+            player.kill();
+            removeObject(player);
+        }
+    }
+
+    public void triggerInteractions(Point2D position) {
+        for (GameObject obj : getObject(position)) {
+            if (obj instanceof Interactive) {
+                ((Interactive) obj).onPlayerEnter(this);
             }
-            if(obj instanceof Rock) {
-                Point2D pos = obj.getPosition();
-                Interactive hole = getInteractiveObject(pos);
-                if (hole instanceof Hole) {
-                    removeObject((GameObject) obj);
+        }
+    }
+
+    public void handleHoleInteractions(List<Pushable> pushedObjs) {
+        for (Pushable pushed : pushedObjs) {
+            for (GameObject atPos : getObject(pushed.getPosition())) {
+                if (atPos instanceof Hole) {
+                    ((GameObject) pushed).onFallInHole((Hole) atPos, this);
+                    break;
                 }
             }
         }

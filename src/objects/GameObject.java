@@ -1,5 +1,6 @@
 package objects;
 
+import pt.iscte.poo.game.Room;
 import pt.iscte.poo.gui.ImageTile;
 import pt.iscte.poo.utils.Point2D;
 
@@ -41,4 +42,6 @@ public abstract class GameObject implements ImageTile {
     public void setName(String imageName) {
         this.imageName = imageName;
     }
+
+    public abstract void onFallInHole(Hole hole, Room room);
 }

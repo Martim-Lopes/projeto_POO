@@ -2,8 +2,6 @@ package pt.iscte.poo.game;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
-
 import objects.Baba;
 import pt.iscte.poo.gui.ImageGUI;
 import pt.iscte.poo.observer.Observed;
@@ -30,15 +28,11 @@ public class GameEngine implements Observer {
     }
 
     public void loadLevel(int level) {
-        try {
-            File file = new File(ROOMS_DIRECTORY + "/room" + level + ".txt");
-            currentRoom = Room.readRoom(file);
-            totalMoves = 0;
-            updateGUI();
-            updateStatusMessage();
-        } catch (FileNotFoundException e) {
-            ImageGUI.getInstance().showMessage("Erro", "Nivel nao encontrado: room" + level + ".txt");
-        }
+        File file = new File(ROOMS_DIRECTORY + "/room" + level + ".txt");
+        currentRoom = Room.readRoom(file);
+        totalMoves = 0;
+        updateGUI();
+        updateStatusMessage();
     }
 
     @Override
@@ -125,14 +119,10 @@ public class GameEngine implements Observer {
             level++;
             loadLevel(level);
         } else {
-            try {
-                File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
-                if (winFile.exists()) {
-                    currentRoom = Room.readRoom(winFile);
-                    updateGUI();
-                }
-            } catch (FileNotFoundException e) {
-                ImageGUI.getInstance().showMessage("Erro", "Mapa Win nao encontrado!");
+            File winFile = new File(ROOMS_DIRECTORY + "/win.txt");
+            if (winFile.exists()) {
+                currentRoom = Room.readRoom(winFile);
+                updateGUI();
             }
             gameWon = true;
             ImageGUI.getInstance().setStatusMessage("Parabens chegaste ao final do jogo | Prime R para reiniciar");

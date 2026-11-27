@@ -51,10 +51,11 @@ public class Baba extends GameObject {
             if (push instanceof WordObject) {
                 consecutiveWords++;
                 if (consecutiveWords > 1) {
-                    return false;
-                }else{
-                    consecutiveWords = 0;
+                    break;
                 }
+            }
+            else{
+                consecutiveWords = 0;
             }
             chain.add(push);
             cursor = cursor.plus(d.asVector());

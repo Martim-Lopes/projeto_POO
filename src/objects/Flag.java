@@ -28,7 +28,7 @@ public class Flag extends GameObject implements Interactive, Pushable {
     @Override
     public void onPlayerEnter(Room room) {
         if (win) {
-            room.setWin(win);
+            room.setWin(true);
         }
     }
 

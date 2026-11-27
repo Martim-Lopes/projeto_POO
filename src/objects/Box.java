@@ -3,7 +3,7 @@ package objects;
 import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
-public class Box extends GameObject implements Pushable, Interactive{
+public class Box extends GameObject implements Pushable, Interactive {
 
     private boolean pushed = false;
     private boolean passable = false;
@@ -35,17 +35,15 @@ public class Box extends GameObject implements Pushable, Interactive{
         this.win = win;
     }
 
-    public boolean isWin() {
-        return win;
-    }
-
     @Override
     public void onPushed(boolean direct) {
     }
 
     @Override
     public void onPlayerEnter(Room room) {
-        room.setWin(win);
+        if (win) {
+            room.setWin(true);
+        }
     }
 
     @Override

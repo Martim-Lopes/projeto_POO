@@ -5,10 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import objects.*;
 import pt.iscte.poo.gui.ImageGUI;
-import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
 public class Room {
@@ -158,10 +156,6 @@ public class Room {
         return null;
     }
 
-    public boolean isInteractive(Point2D position) {
-        return getInteractiveObject(position) != null;
-    }
-
     public void setWin(boolean win) {
         this.win = win;
     }
@@ -244,7 +238,7 @@ public class Room {
     }
 
 
-    //funções para a bomba
+    //funcoes para a bomba
 
     public void onTick() {
         for (GameObject obj : new ArrayList<>(objects)) {

@@ -190,6 +190,13 @@ public class Room {
                     addObject(new BoxInHole(pos));
                 }
             }
+            if(obj instanceof Rock) {
+                Point2D pos = obj.getPosition();
+                Interactive hole = getInteractiveObject(pos);
+                if (hole instanceof Hole) {
+                    removeObject((GameObject) obj);
+                }
+            }
         }
     }
 
@@ -238,7 +245,7 @@ public class Room {
     }
 
 
-    //funções bomba
+    //funções para a bomba
 
     public void onTick() {
         for (GameObject obj : new ArrayList<>(objects)) {

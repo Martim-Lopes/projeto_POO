@@ -24,12 +24,6 @@ public class Baba extends GameObject {
         return "baba-" + direction;
     }
 
-    @Override
-    public void onFallInHole(Hole hole, Room room) {
-        room.removeObject(this);
-        this.alive = false;
-    }
-
     public boolean isAlive() {
         return alive;
     }
@@ -44,11 +38,11 @@ public class Baba extends GameObject {
         }
         direction = letterFor(d);
         Point2D next = getPosition().plus(d.asVector());
+        // avancamos com o baba antes de empurrar, isso faz a bandeira ser empurravel indiretamente e conseguirmos entrar nela para ganhar
+        // o baba entra na bandeira antes de empurrar e passa logo de nivel
         if (room.canMove(next)) {
             setPosition(next);
-            if (room.isInteractive(next)) {
-                room.getInteractiveObject(next).onPlayerEnter(room);
-            }
+            room.triggerInteractions(next);
             return true;
         }
         List<Pushable> chain = new ArrayList<>();
@@ -58,29 +52,27 @@ public class Baba extends GameObject {
             Pushable push = room.getPushableObject(cursor);
             if (push instanceof WordObject) {
                 consecutiveWords++;
-            }
-            if (consecutiveWords > 1) {
-                break;
+                if (consecutiveWords > 1) {
+                    return false;
+                }else{
+                    consecutiveWords = 0;
+                }
             }
             chain.add(push);
             cursor = cursor.plus(d.asVector());
         }
         if (!chain.isEmpty() && room.canMove(cursor)) {
-            for (Pushable obj : chain) {
+            // utilizar for com i em vez de : porque assim podemos usar o i == 0 no onPushed
+            for (int i = 0; i < chain.size(); i++) {
+                Pushable obj = chain.get(i);
                 obj.setPosition(obj.getPosition().plus(d.asVector()));
-                if (chain.indexOf(obj) == 0) {
-                    obj.onPushed(true);
-                } else {
-                    obj.onPushed(false);
-                }
+                // i == 0 significa que e a primeira posicao. Se for a primeira posicao significa que foi empurrado diretamente pelo baba
+                obj.onPushed(i == 0);
             }
             room.handleHoleInteractions(chain);
             room.updateRules();
             setPosition(next);
             room.triggerInteractions(next);
-            if (room.isInteractive(next)) {
-                room.getInteractiveObject(next).onPlayerEnter(room);
-            }
             return true;
         }
         return false;

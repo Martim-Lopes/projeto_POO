@@ -14,8 +14,4 @@ public class Hole extends  GameObject implements Interactive {
     public void onPlayerEnter(Room room) {
         room.killPlayer();
     }
-
-    @Override
-    public void onFallInHole(Hole hole, Room room) {
-    }
 }

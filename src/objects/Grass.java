@@ -9,9 +9,4 @@ public class Grass extends GameObject {
     public Grass(Point2D position) {
         super(position, "grass", 10);
     }
-
-    @Override
-    public void onFallInHole(Hole hole, Room room) {
-
-    }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import objects.*;
+import pt.iscte.poo.gui.ImageGUI;
 import pt.iscte.poo.utils.Direction;
 import pt.iscte.poo.utils.Point2D;
 
@@ -56,49 +57,54 @@ public class Room {
         return objects;
     }
 
-    public static Room readRoom(File f) throws FileNotFoundException {
+    public static Room readRoom(File f) {
         Room r = new Room();
         r.setName(f.getName());
-        Scanner sc = new Scanner(f);
+        try {
 
-        String[] s = sc.nextLine().split(",");
-        r.cols = Integer.parseInt(s[0].trim());
-        r.rows = Integer.parseInt(s[1].trim());
+            Scanner sc = new Scanner(f);
 
-        for (int i = 0; i < r.cols; i++) {
-            for (int j = 0; j < r.rows; j++) {
-                GameObject dirt = new Dirt(new Point2D(i, j));
-                r.addObject(dirt);
-            }
-        }
-        int j = 0;
-        while (sc.hasNextLine()) {
-            String line = sc.nextLine();
-            if (line.isBlank()) {
-                break;
-            }
-            for (int i = 0; i < line.length(); i++) {
-                char c = line.charAt(i);
-                MapElements elements = MapElements.fromChar(c);
-                if (elements != null) {
-                    r.addObject(elements.create(new Point2D(i, j)));
+            String[] s = sc.nextLine().split(",");
+            r.cols = Integer.parseInt(s[0].trim());
+            r.rows = Integer.parseInt(s[1].trim());
+
+            for (int i = 0; i < r.cols; i++) {
+                for (int j = 0; j < r.rows; j++) {
+                    GameObject dirt = new Dirt(new Point2D(i, j));
+                    r.addObject(dirt);
                 }
             }
-            j++;
-        }
-        while (sc.hasNextLine()) {
-            String line = sc.nextLine().trim();
-            if (line.isEmpty()) {
-                continue;
+            int j = 0;
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                if (line.isBlank()) {
+                    break;
+                }
+                for (int i = 0; i < line.length(); i++) {
+                    char c = line.charAt(i);
+                    MapElements elements = MapElements.fromChar(c);
+                    if (elements != null) {
+                        r.addObject(elements.create(new Point2D(i, j)));
+                    }
+                }
+                j++;
             }
-            GameObject obj = RoomObjects.createFromLine(line);
-            r.addObject(obj);
-            if (obj instanceof Baba) {
-                r.player = (Baba) obj;
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine().trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                GameObject obj = RoomObjects.createFromLine(line);
+                r.addObject(obj);
+                if (obj instanceof Baba) {
+                    r.player = (Baba) obj;
+                }
             }
+            r.updateRules();
+            sc.close();
+        } catch (FileNotFoundException e) {
+            ImageGUI.getInstance().showMessage("Erro", "Erro ao ler o quarto: " + f.getName());
         }
-        r.updateRules();
-        sc.close();
         return r;
     }
 
@@ -186,7 +192,7 @@ public class Room {
         for (Pushable pushed : pushedObjs) {
             for (GameObject atPos : getObject(pushed.getPosition())) {
                 if (atPos instanceof Hole) {
-                    ((GameObject) pushed).onFallInHole((Hole) atPos, this);
+                    (pushed).onFallInHole((Hole) atPos, this);
                     break;
                 }
             }

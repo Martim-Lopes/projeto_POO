@@ -43,5 +43,4 @@ public abstract class GameObject implements ImageTile {
         this.imageName = imageName;
     }
 
-    public abstract void onFallInHole(Hole hole, Room room);
 }

@@ -15,8 +15,4 @@ public class Wall extends  GameObject {
         return false;
     }
 
-    @Override
-    public void onFallInHole(Hole hole, Room room) {
-
-    }
 }

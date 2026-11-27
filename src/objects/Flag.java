@@ -3,7 +3,7 @@ package objects;
 import pt.iscte.poo.game.Room;
 import pt.iscte.poo.utils.Point2D;
 
-public class Flag extends GameObject implements Interactive{
+public class Flag extends GameObject implements Interactive, Pushable {
 
     private boolean win = true;
 
@@ -12,13 +12,24 @@ public class Flag extends GameObject implements Interactive{
         setWin(true);
     }
 
-    public void  setWin(boolean win){
+    public void setWin(boolean win) {
         this.win = win;
     }
 
     @Override
+    public boolean canBePushed(Room room){
+        return true;
+    }
+
+    @Override
+    public void onPushed(boolean direct) {
+    }
+
+    @Override
     public void onPlayerEnter(Room room) {
-        room.setWin(win);
+        if (win) {
+            room.setWin(win);
+        }
     }
 
     @Override

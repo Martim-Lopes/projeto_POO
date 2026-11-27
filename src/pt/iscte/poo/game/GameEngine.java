@@ -57,9 +57,7 @@ public class GameEngine implements Observer {
                 Direction d = Direction.directionFor(k);
                 if (getPlayer().move(d, currentRoom)) {
                     totalMoves++;
-                    if (!getPlayer().isAlive()) {
-                        restart("Morreste", "Tem mais cuidado para a próxima!");
-                    } else if (currentRoom.hasContradiction()) {
+                    if (currentRoom.hasContradiction()) {
                         //ver se as regras das palavras são contraditórias ou se estão repetidas
                         restart("Morreste", "Não é permitido ter duas condições em simultâneo");
                     } else if (!gameWon) {

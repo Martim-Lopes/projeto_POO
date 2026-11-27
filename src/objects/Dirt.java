@@ -9,9 +9,4 @@ public class Dirt extends GameObject {
     public Dirt(Point2D position) {
         super(position, "dirt", 5);
     }
-
-    @Override
-    public void onFallInHole(Hole hole, Room room) {
-
-    }
 }

@@ -32,7 +32,7 @@ public class Bomb extends GameObject implements Pushable {
     }
 
 
-    //Bomb: é móvel e o seu rastilho acende quando o jogador a empurra diretamente. Explode ao
+    //Bomb: e móvel e o seu rastilho acende quando o jogador a empurra diretamente. Explode ao
     //final de 10 ticks, removendo-se a si e a todos os objetos nas oito posições adjacentes (Wall
     //passa a CrackedWall). Enquanto o rastilho arde, pode continuar a ser empurrada.
     // Se for empurrada indiretamente por outros objetos, o rastilho não acende.

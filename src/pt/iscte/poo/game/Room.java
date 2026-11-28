@@ -193,6 +193,24 @@ public class Room {
         }
     }
 
+    public void handleAcidInteractions(List <Pushable> pushedObjs) {
+        for(Pushable p : pushedObjs) {
+            if(!(p instanceof Acid)){
+                continue;
+            }
+            Acid a= (Acid) p;
+            if(a.wasDirectPush()) {
+                killPlayer();
+                return;
+            }
+            for(GameObject o : getObject(a.getPosition())) {
+                if(o instanceof Rock) {
+                    removeObject(o);
+                }
+            }
+        }
+    }
+
 
     // Parte das palavras
 

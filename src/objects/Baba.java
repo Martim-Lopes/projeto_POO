@@ -46,8 +46,15 @@ public class Baba extends GameObject {
         List<Pushable> chain = new ArrayList<>();
         Point2D cursor = next;
         int consecutiveWords = 0;
+        Rock melted = null;
         while (room.canPush(cursor)) {
             Pushable push = room.getPushableObject(cursor);
+            //pedra seguida de acido?
+            if (push instanceof Acid && !chain.isEmpty() && chain.get(chain.size() - 1) instanceof Rock) {
+                melted = (Rock) chain.remove(chain.size() - 1);
+                break;
+            }
+
             if (push instanceof WordObject) {
                 consecutiveWords++;
                 if (consecutiveWords > 1) {
@@ -60,6 +67,20 @@ public class Baba extends GameObject {
             chain.add(push);
             cursor = cursor.plus(d.asVector());
         }
+        // Pedra contra ácido: a pedra é removida e o ácido não se move
+        if (melted != null) {
+            for (int i = 0; i < chain.size(); i++) {
+                Pushable obj = chain.get(i);
+                obj.setPosition(obj.getPosition().plus(d.asVector()));
+                obj.onPushed(i == 0);
+            }
+            room.removeObject(melted);
+            room.handleHoleInteractions(chain);
+            room.updateRules();
+            setPosition(next);
+            room.triggerInteractions(next);
+            return true;
+        }
         if (!chain.isEmpty() && room.canMove(cursor)) {
             // utilizar for com i em vez de : porque assim podemos usar o i == 0 no onPushed
             for (int i = 0; i < chain.size(); i++) {
@@ -69,6 +90,9 @@ public class Baba extends GameObject {
                 obj.onPushed(i == 0);
             }
             room.handleHoleInteractions(chain);
+            room.handleAcidInteractions(chain);
+            if(!isAlive())
+                return true;
             room.updateRules();
             setPosition(next);
             room.triggerInteractions(next);

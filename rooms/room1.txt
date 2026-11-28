@@ -1,8 +1,8 @@
 23,17
 XXXXXXXXXXXXXXXXXXXXXXX
 XXXg g   XXXXXXXXXXXXXX
-X  Xx     XXXXXX     XX
-X   Xg    XXXXXXg  g XX
+X  Xx A    XXXXXX    XX
+X   X    XXXXXXg  g  XX
 X      Xx XXXXXX XX   X
 X  H      XXXXXX      X
 XXXg       XXXXX g  g X

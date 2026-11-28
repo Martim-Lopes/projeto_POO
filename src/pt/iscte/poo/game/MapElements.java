@@ -28,6 +28,12 @@ public enum MapElements {
         public GameObject create(Point2D position) {
             return new Grass(position);
         }
+    },
+    ACID('A') {
+        @Override
+        public GameObject create(Point2D position) {
+            return new Acid(position);
+        }
     };
 
     private final char symbol;
